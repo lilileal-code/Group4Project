@@ -1,10 +1,10 @@
-# [Product/Service Name] — Specification
+# BingeBound — Specification
 
-> **When:** Week 1 (Section 0), Week 2 (the rest), refined in Week 3 · **Owner:** Product Owner · **Done when:** every item in the SVC Self-Check at the end is true.
+> **When:** Week 1 (Section 0), Week 2 (the rest), refined in Week 3 · **Owner:** Lilah Leal · **Done when:** every item in the SVC Self-Check at the end is true.
 >
 > **Version:** 1.0
 >
-> **Approved on:** ___ **by:** Product Owner ___ · Architecture Lead ___ · Delivery Lead ___
+> **Approved on:** 22 October 2026 **by:** Product Owner: Lilah leal · Architecture Lead: Morgan Elliot · Delivery Lead: Ben Anderson
 >
 > **Filled-in Example:** `docs/examples/specification-example.md`
 
@@ -18,9 +18,9 @@ The Spec is the source of truth for *what* you're building. Write it so a teamma
 
 | # | Principle | Why it exists |
 |---|-----------|---------------|
-| 1 | | |
-| 2 | | |
-
+| 1 | Every title, status, and note stays private to the signed-in user. No public profiles, follower graphs, or activity feeds. | A social layer would turn a one-term personal list into a product we cannot finish or moderate. |
+| 2 | The user types the title. No streaming-catalog APIs, scrapers, or auto-import from Netflix/TMDB in the first release. | An external catalog adds keys, rate limits, and scope we do not control and do not need for the demo. |
+| 3 | The public demo must load for the instructor on a free GitHub Pages (or equivalent free) URL with no paid account and no secret the team cannot commit. | If the demo only runs on one laptop or a paid host, the sponsor cannot review it and the project fails the course bar. |
 ---
 
 ## 1. Problem & Evidence
