@@ -4,7 +4,7 @@
 
 ---
 
-## Week [1] — [October 23, 2026]
+## Week 1 — October 23, 2026
 
 - **Done:**
   - **October 22, 2026:** Completed the Business Case (`business-case.md`).
