@@ -25,7 +25,7 @@ At least 70% of the team’s test users add five or more titles and mark a statu
 
 ## 2. Proposed Solution
 
-A simple personal watchlist: sign in, add a title by name, set a status, make notes on each title, and search or filter your own list. During and after a series is finished, the user will be able to rate the series out of ten to further their completed status section sorting options. No social feed and no streaming catalog in the first version.
+A simple personal watchlist: sign in, add a title by name, set a status, make notes on each title, and search or filter your own list. During and after a series is finished, the user will be able to rate the series out of ten to further their completed status section sorting options. BingeBound will give its users one searchable and organized location that can track titles across multiple services, reducing the need for multiple lists or remembering what they planned to watch. No social feed and no streaming catalog in the first version.
 
 ---
 
