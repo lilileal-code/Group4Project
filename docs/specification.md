@@ -36,6 +36,7 @@ The Spec is the source of truth for *what* you're building. Write it so a teamma
 | E3 | Updating status (want to watch / watching / finished) is the annoying part. With so many unorganized titles, the list goes stale. | Family who share the same list, in person |
 | E4 | "I don’t want followers or a feed. I just want my list.” They had tried a social movie app and stopped. | Same group, when asked about Letterboxd-style/IMDB apps |
 | E5 | Week 3 Test - fill in later | Outside Team |
+
 **Riskiest assumption:** People will type titles by hand instead of searching a catalog. If they refuse to type, the no-API rule sinks the product. We find out by watching a friend add three mixed titles (one American, one international) in the Week 3 prototype.
 
 ---
