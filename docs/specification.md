@@ -4,7 +4,7 @@
 >
 > **Version:** 1.0
 >
-> **Approved on:** 22 October 2026 **by:** Product Owner: Lilah leal · Architecture Lead: Austin Hammond · Delivery Lead: Ben Anderson
+> **Approved on:** 29 October 2026 **by:** Product Owner: Lilah leal · Architecture Lead: Austin Hammond · Delivery Lead: Ben Anderson
 >
 > **Filled-in Example:** `docs/examples/specification-example.md`
 
