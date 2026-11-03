@@ -15,7 +15,7 @@
 - **Open questions:** Q1 — real login or device-only storage; Q2 — two-value origin flag or free-text country; Q3 — Week 3 prototype findings.
 - **AI use:** AI assistance was not used to prepare any of the documents for this week.
 - **Change request:** None.
-- **Instructor response:** Pending.
+- **Instructor response:** jLyst: Approved
 
 ---
 
