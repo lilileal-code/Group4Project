@@ -1,10 +1,10 @@
-# [Product/Service Name] — Plan
+# BingeBound — Plan
 
-> **When:** Week 3 (Sections 1–2), Week 4 (Sections 3–4) · **Owner:** Architecture Lead (in a team of 4, the Plan owner) · **Done when:** every item in the SVC Self-Check at the end is true.
+> **When:** Week 3 (Sections 1–2), Week 4 (Sections 3–4) · **Owner:** Ben Anderson · **Done when:** every item in the SVC Self-Check at the end is true.
 >
 > **Version:** 1.0
 >
-> **Approved on:** ___ **by:** Architecture Lead ___ · Product Owner ___ · Delivery Lead ___
+> **Approved on:** ___ **by:** Product Owner: Lilah Leal · Architecture Lead: Austin Hammond · Delivery Lead: Ben Anderson
 >
 > **Filled-in Example:** `docs/examples/plan-example.md`
 
