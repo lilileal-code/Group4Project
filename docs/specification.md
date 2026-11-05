@@ -35,27 +35,29 @@ The Spec is the source of truth for *what* you're building. Write it so a teamma
 | E2 | “American stuff is in one app. The Korean and Spanish shows are in a different list. I never open both.” | Close friend, text |
 | E3 | Updating status (want to watch / watching / finished) is the annoying part. With so many unorganized titles, the list goes stale. | Family who share the same list, in person |
 | E4 | "I don’t want followers or a feed. I just want my list.” They had tried a social movie app and stopped. | Same group, when asked about Letterboxd-style/IMDB apps |
-| E5 | Week 3 Test - fill in later | Outside Team |
-
+| E5 | Viewed the sample entries and the add title screen. She tried adding a title, paused on the word "American," then said "U.S. would be clearer." Used the choices after that and successfully created a new title. | Cousin, in person, 11/05/2026 |
+| E6 | On the series screen, they pointed out that the international option should be free text because they wanted to specify where the series was internationally (e.g. seperating Korean series from other countries). | Friend, over the phone via screenshare, 11/05/2026 |
+| E7 | Used the Plan to Watch, Watching, and Completed home screen filters. Asked what the Dropped and On Hold filters would be used for. After explaining, they used it to mark one of the shows. Liked the notes option and gave it a 10/10. | Sister, in person, 11/05/2026 |
+| E8 | Asked before opening prototype if they'd need to make an account once it's fully finished. Continued when told that their info will be stored on their device. Tapped the X on one of the cards expecting it to delete. Overall, thought it was a solid start. | Uncle, in person, 11/05/2026 |
 **Riskiest assumption:** People will type titles by hand instead of searching a catalog. If they refuse to type, the no-API rule sinks the product. We find out by watching a friend add three mixed titles (one American, one international) in the Week 3 prototype.
-
+**Prototype Result:** They did as we hoped. They added a U.S. title and an international title by typing it in. The assumption holds for V1.
 ---
 
 ## 2. Scope
 
 **In scope:** *(What this version will do.)*
 - A private list of titles the user typed
-- Fields: title, type (movie or show), language or origin (American / international), status (To watch / Watching / Finished), optional note
+- Fields: title, type (movie or series), language or origin (U.S. / international), status (Plan to watch / Watching / Completed / On Hold / Dropped), optional note, episode tracker and rating bar (only when series and watching, or completed, are selected together).
 - Add a title, open it, change status, delete it
 - Filter or search the list by title, type, origin, or status
 - Sample data so the instructor can use the demo without signing in, clearly labeled as demo data
 - Phone-width layout on a free static host
   
 **Out of scope:** *(What it will NOT do. This list stops the AI build from adding extras.)*
-- Streaming catalog search, TMDB, Netflix, or auto-import
+- Streaming catalog search, IMDB, Netflix, or auto-import
 - Public profiles, follows, ratings feeds, or comments
-- Real accounts if the free host cannot support them; device-only flags are acceptable in v1 if login cannot ship on Pages
-- Episode-level tracking, release-date alerts, and “what’s new this week”
+- Real accounts; device-only flags are acceptable in v1 if login cannot ship on Pages
+- Release-date alerts and “what’s new this week”
 - Recommendations or AI-generated lists
 ---
 
@@ -110,19 +112,21 @@ The Spec is the source of truth for *what* you're building. Write it so a teamma
 
 | ID | Requirement | Priority | Acceptance test (do → expect) | Evidence |
 | --- | --- | --- | --- | --- |
-| R1 | The system shall show a private list of titles the user added. | P1 | Load the list → at least the sample titles are visible, labeled as demo data. | E1, E4 |
-| R2 | When the user adds a title, the system shall save the title, type (movie or show), and origin (American or international) that they typed. | P1 | Add “Parasite” as movie, international → it appears on the list with those values. | E2 |
-| R3 | When the user changes a title’s status, the system shall show To watch, Watching, or Finished and keep that status after reload. | P1 | Set “The Bear” to Finished, reload → status is still Finished. | E3 |
-| R4 | When the user filters by origin or status, the system shall show only matching titles. | P1 | Filter International + To watch → only matching sample titles remain. | E2 |
-| R5 | When the user searches by title, the system shall filter the list as they type. | P1 | Type “para” → only titles containing that text stay visible. | E1 |
-| R6 | If the add form is submitted with a blank title, then the system shall not save a row and shall say the title is required. | P1 | Submit Add with an empty title → no new row; “Title is required.” | S1 failure |
-| R7 | If a filter matches nothing, then the system shall say no titles match and offer a way to clear the filter. | P1 | Filter to a status with no rows → empty message and a clear control. | S2 failure |
-| R8 | The system shall label sample data as demonstration data, not the user’s personal list. | P1 | Read the list → demo wording is visible without opening a title. | Constitution 1, E4 |
-| R9 | The system shall load on a free public URL with no paid account and no secret in the repo. | P1 | Open the GitHub Pages URL in a fresh browser → list appears. | Constitution 3 |
-| R10 | Where the screen is phone width, the system shall keep add, filter, and status controls usable with no sideways scroll. | P1 | View at 375px → no horizontal scroll; primary buttons tappable. | ASSUMPTION (phone use) |
-| R11 | When the user deletes a title, the system shall remove it from the list. | P2 | Delete a sample title → it is gone after reload. | E3 |
-| R12 | The system shall not call a streaming or catalog API to fill titles. | P1 | Inspect the app → titles come from typed or sample data only. | Constitution 2 |
-
+| R1 | The system shall show a private list of titles, newest first. | P1 | Load home → sample cards visible; add “Parasite” → it is the first card. | E1, E7 |
+| R2 | When the user adds a title, the system shall save title, country (U.S. or International), status, and type (Movie or Series). | P1 | Add Parasite, International, Watching, Movie → card shows those values. | E2, E5 |
+| R3 | When the user sets status, the system shall use the words Plan to Watch, Watching, Completed, Dropped, or On Hold, and keep it after reload. | P1 | Set The Handmaiden's Tale to Completed, reload → status is still Completed. | E3, E7 |
+| R4 | When the user taps All, To Watch, Watching, or Completed, the system shall show only titles in that status. All shows every title. | P1 | Tap To Watch → only Plan to Watch cards remain. | E7 |
+| R5 | When the user types in Search titles here, the system shall filter cards by title as they type. | P1 | Type “para” → only Parasite stays. | E1 |
+| R6 | If Save is tapped with a blank title, then the system shall not save a row and shall say “Type a title to save it.” | P1 | Save with an empty title → no new card; that message shows. | S1 failure |
+| R7 | If a filter or search matches nothing, then the system shall say “No titles match. Clear filters.” | P1 | Search “zzzz” → that message and a way to clear. | S3 failure |
+| R8 | The system shall label sample data as “Sample titles. Not your personal list.” | P1 | Read home → that sentence is visible. | E4, constitution 1 |
+| R9 | The system shall load on a free public URL with no paid account, no secret, and no login wall. | P1 | Open the Pages URL in a fresh browser → list appears. | E8, constitution 3 |
+| R10 | Where the screen is phone width, the system shall keep Add Title, filters, and Save usable with no sideways scroll. | P1 | View at 375px → no horizontal scroll; buttons at least 44px. | ASSUMPTION |
+| R11 | When the user taps the X on a card, the system shall delete that title and keep it gone after reload. | P2 | Tap X on Squid Game, reload → it is gone. | E8 |
+| R12 | The system shall not call a streaming or catalog API to fill titles. | P1 | Inspect the app → titles come from typed or sample data only. | Constitution 2, E5 |
+| R13 | When the user saves a note or a rating from 0 to 10, the system shall show them on that title after reload. | P2 | Set rating 8 and a note, reload → both remain. | E7 |
+| R14 | While type is Series, the system shall show episode progress as current / total. While type is Movie, the system shall hide episode fields. | P2 | Pick Series → 0 / 0 fields show. Pick Movie → they hide. | Prototype series screen |
+| R15 | If the user asks to type a country instead of International, then the system shall still offer only U.S. and International in v1. | P2 | Add form → two country choices, no free-text country field. | E6 |
 
 ---
 
@@ -132,9 +136,20 @@ The Spec is the source of truth for *what* you're building. Write it so a teamma
 
 | ID | Question | Raised by | Owner | Status |
 | --- | --- | --- | --- | --- |
-| Q1 | Does v1 use real login, or device-only storage so the free host can demo it? | Spec | Team | Open |
-| Q2 | Is “origin” a two-value flag (American / international) or a free-text country? | Spec | Team | Open — draft uses two values |
-| Q3 | Week 3 prototype findings | Team | Product owner | Open — fill after the test |
+| Q1 | Does v1 use real login, or device-only storage so the free host can demo it? | Spec | Team | Resolved: device-only in v1. No login. |
+| Q2 | Is “origin” a two-value flag (American / international) or a free-text country? | Spec | Team | Resolved: not in v1. Two options, labeled U.S. and International. Revisit later. |
+| Q3 | Prototype findings? | Team | Product owner | Resolved: E5-E8. Changes are U.S. label, five statuses, notes, rating 0-10, series episode tracker, no login. |
+
+---
+
+## Prototype Screenshots:
+
+<img width="360" height="480" alt="View Parasite" src="https://github.com/user-attachments/assets/a2a0f1a7-0d8a-47d0-a191-42861736392b" />
+<img width="360" height="480" alt="Home Page" src="https://github.com/user-attachments/assets/e69aa61c-8039-41f3-94a9-5ca7137b0a03" />
+<img width="360" height="480" alt="Add Title" src="https://github.com/user-attachments/assets/c3e10717-cdb3-4b4a-a9ee-90bebe4f2565" />
+<img width="360" height="480" alt="Add Title - Watching Series" src="https://github.com/user-attachments/assets/07109773-8b70-45d8-bd70-1c052cc899f0" />
+<img width="360" height="480" alt="Add Title – 1" src="https://github.com/user-attachments/assets/e9523cf5-f76e-401e-af3e-54f2b8f40bf8" />
+
 
 ---
 
