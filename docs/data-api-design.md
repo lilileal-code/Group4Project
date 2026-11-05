@@ -4,7 +4,7 @@
 >
 > **Version:** 1.0
 >
-> **Approved on:** ___ **by:** Architecture Lead ___ · Product Owner ___ · Delivery Lead ___
+> **Approved on:** ___ **by:** Architecture Lead Austin Hammond · Product Owner Lila Leal · Delivery Lead Ben Anderson
 >
 > **Filled-in Example:** `docs/examples/data-api-design-example.md`
 
@@ -14,15 +14,15 @@ This document turns the Spec's nouns into data and its user actions into endpoin
 
 ## 0. Database & Storage
 
-**Database:** *(The real database this design is for, from ADR-00 in `plan.md`, e.g. "PostgreSQL via Supabase.")*
+**Database:** PostgreSQL through Supabase for System Implementation, as proposed in ADR-00 of plan.md
 
-**Build option:** Simulated backend / Real backend *(Simulating? Keep designing for the real database — that's what System Implementation will build. The simulation uses the same entities, field names, and endpoints as this document.)*
+**Build option:** Simulated backend for course test build. Use the course’s simulated login/user picker, sample JSON and browser storage here. This uses the exact same definitions for entities User and Title and their corresponding field names in System Implementation. Simulated backend here uses Supabase Auth to gain access to authenticated user ID, and then titles are stored in PostgreSQL.
 
-**We store:** *(One or two sentences. What must the app remember between visits?)*
+**We store:** A user's watchlist titles and each title's type, origin, and watch status. Each title is associated with one user so queries can return only that user's list. The demo list is marked so the interface can label it as demonstration data.
 
-**We do NOT store:** *(e.g. "Passwords — login is simulated, or handled by the login service.")*
+**We do NOT store:** Password, streaming catalog data, episode progress, external service data. All authentication data is owned by the authentication service, and this app stores nothing but the user ID reference.
 
-**Sensitive fields:** *(Personal or private data, and how it's protected. Write "None" if none.)*
+**Sensitive fields:** Title.title and Title.status will reveal the viewing interests of a user. An optional note would also be personal in nature if you were to retain it. In the real backend, we can enforce per-user access using Supabase Row Level Security (RLS) and setup policies to enforce that Title.owner_id = authenticated_user.id. In the test build, we will store the Title in the browser scoped to the currently selected simulated user. We will not store any personal data in the public sample JSON files. The Demo sample records are all synthetic and clearly labeled as such.
 
 *This template assumes a relational database (tables, rows, keys). Using a document database such as MongoDB or Firestore? See the "Document databases" box in `docs/reference/data-api-design-guide.md`.*
 
@@ -41,7 +41,28 @@ This document turns the Spec's nouns into data and its user actions into endpoin
 | id | uuid | PK | Yes | |
 | | | | | |
 
-*(Repeat for each entity. 3–6 is typical.)*
+**Entity: User**
+
+One person who owns a watchlist. In the real backend, `id` is the Supabase Auth user UUID. In the course test build, it is the selected simulated user's stable ID.
+
+| Field | Type | Key | Required? | Req ID |
+|-------|------|-----|-----------|--------|
+| id | uuid | PK | Yes | R1 |
+| is_demo | boolean | — | Yes (default false) | R8 |
+
+**Entity: Title**
+
+One movie or show in a user's watchlist. Users may enter the same title more than once.
+
+| Field | Type | Key | Required? | Req ID |
+|-------|------|-----|-----------|--------|
+| id | uuid | PK | Yes | R1 |
+| owner_id | uuid | FK → User.id | Yes | R1 |
+| title | text | — | Yes; non-blank | R2, R6 |
+| type | enum: `movie`, `show` | — | Yes | R2 |
+| origin | enum: `American`, `International` | — | Yes | R2, R4 |
+| status | enum: `To watch`, `Watching`, `Finished` | — | Yes; default `To watch` | R3, R4 |
+
 
 ---
 
@@ -49,17 +70,15 @@ This document turns the Spec's nouns into data and its user actions into endpoin
 
 *Draw every entity in [Mermaid](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) with its keys and relationships. List only PK, FK, and Unique fields — Section 1 holds the rest. Check that it renders at [mermaid.live](https://mermaid.live) before pasting it here.*
 
-```mermaid
 erDiagram
-  PARENT ||--o{ CHILD : "has"
-  PARENT {
+  USER ||--o{ TITLE : "owns"
+  USER {
     uuid id PK
   }
-  CHILD {
+  TITLE {
     uuid id PK
-    uuid parent_id FK
+    uuid owner_id FK
   }
-```
 
 *`||--o{` means "one to zero-or-many". See the Mermaid link for other options.*
 
