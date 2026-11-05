@@ -1,4 +1,4 @@
-# [Product/Service Name] — Data & API Design
+# [BingeBound] — Data & API Design
 
 > **When:** Week 3 (Sections 0–2), Week 4 (Sections 3–4) · **Owner:** Architecture Lead (in a team of 4, the Data & API owner) · **Done when:** every item in the SVC Self-Check at the end is true.
 >
