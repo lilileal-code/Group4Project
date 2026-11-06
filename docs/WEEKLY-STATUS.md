@@ -24,7 +24,7 @@
   - Q3 — Resolved: Prototype findings are documented in E5–E8.
 - **AI use:** AI assistance was used to help choose the color scheme for the prototype.
 - **Change request:** None reported.
-- **Instructor response:** Pending.
+- **Instructor response:** jLyst: Approved
 
 ---
 
