@@ -63,6 +63,7 @@ One movie or show in a user's watchlist. Users may enter the same title more tha
 | origin | enum: `American`, `International` | — | Yes | R2, R4 |
 | status | enum: `To watch`, `Watching`, `Finished` | — | Yes; default `To watch` | R3, R4 |
 
+**Foreign-key delete rule:** `Title.owner_id → User.id` uses **delete children too** (`ON DELETE CASCADE`). Deleting a user deletes that user's titles. Deleting one title removes only that title, as required by R11.
 
 ---
 
@@ -70,6 +71,7 @@ One movie or show in a user's watchlist. Users may enter the same title more tha
 
 *Draw every entity in [Mermaid](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) with its keys and relationships. List only PK, FK, and Unique fields — Section 1 holds the rest. Check that it renders at [mermaid.live](https://mermaid.live) before pasting it here.*
 
+```mermaid
 erDiagram
   USER ||--o{ TITLE : "owns"
   USER {
@@ -79,6 +81,7 @@ erDiagram
     uuid id PK
     uuid owner_id FK
   }
+```
 
 *`||--o{` means "one to zero-or-many". See the Mermaid link for other options.*
 
@@ -86,11 +89,11 @@ erDiagram
 
 ## 3. Normalization Check
 
-- [ ] **1NF** — every field holds one value (no lists or comma-separated values in a field).
-- [ ] **2NF** — every field depends on the whole primary key.
-- [ ] **3NF** — no field depends on another non-key field (e.g. don't store `event_name` on a photo — store `event_id`).
+- [x] **1NF** — every field holds one value (no lists or comma-separated values in a field).
+- [x] **2NF** — every field depends on the whole primary key.
+- [x] **3NF** — no field depends on another non-key field (e.g. don't store `event_name` on a photo — store `event_id`).
 
-**Intentional exceptions:** *(Any rule you broke on purpose, and why — or "None".)*
+**Intentional exceptions:** None.
 
 ---
 
@@ -101,6 +104,17 @@ erDiagram
 | Req ID | Method | Path | Request | Success response | Errors | Who can call it |
 |--------|--------|------|---------|------------------|--------|-----------------|
 | | | | | | | Anyone / Member / Admin |
+| R1 | POST | /v1/login | { user_id } (SELECTED FROM user picker - SIMULATED DATA) | 200 - { id: 1, is_demo: true } | 400 - { "error": "user_id is invalid" } | Anyone |
+| R1 | GET | /v1/me | — | 200 `{ id, is_demo }` for the current user | 401 | Member |
+| R1 | POST | /v1/logout | — | 204 | — | Member |
+| R1 | GET | /v1/users | — | 200 [{id, is_demo}] | — | Anyone |
+| R1, R8 | GET | /v1/demo/titles | — | 200 `{is_demo: true, items: [...]}` | — | Anyone |
+| R1, R8 | GET | /v1/demo/titles/{id} | Title ID in path | 200 requested synthetic sample title | 404 title not found | Anyone |
+| R1, R4, R5, R7 | GET | /v1/titles | Search text, Title type, Title origin, Status | 200 List of Titles belonging to the user that sent the request. Titles that don’t match the search, type, origin or status filters return a 200 with an empty array. | 400 - Bad request: The filter values are incorrect. 401 - Unauthorized. | Member – logged in user. |
+| R1 | GET | /v1/titles/{id} | Title ID in path | 200 requested synthetic sample title | 401, 404 title not found or not owned by the current user | Member |
+| R2, R6 | POST | /v1/titles | { title, type, origin } | { id: 201, title: '...', type: '...', origin: '...', status: 'To watch', user_id: your_id } | 400: { error: "title can't be blank or of wrong length" }, 401, 404 (the title wasn’t found or you are not the owner of the title) | Member – logged in user |
+| R3 | PATCH | /v1/titles/{id} | status = {status} | 200 { title: '...', type: '...', origin: '...', status: '...' } | 400: {error: "status: invalid status"}; 401; 404: {error: "Title not found"\|"Title is owned by different user"} | Member – logged in user |
+| R11 | DELETE | /v1/titles/{id} | title ID in path | 204 – Title was deleted | 401; 404 – Title not found or user does not own title | Member – logged in user |
 
 *Common status codes: `200` OK · `201` Created · `400` bad input · `401` not logged in · `403` not allowed · `404` not found · `409` conflict (e.g. duplicate).*
 
@@ -108,6 +122,6 @@ erDiagram
 
 ## SVC Self-Check
 
-- [ ] **Simple** — entities are plain nouns from the Spec; paths are nouns, not verbs (`/photos`, not `/getPhotos`).
-- [ ] **Valuable** — every field and endpoint has a requirement ID; anything without one has been cut; sensitive fields are named and protected.
-- [ ] **Complete** — the database matches ADR-00; every P1 requirement that stores or reads data has its entity and endpoint; every FK has a delete rule; the ERD renders and shows cardinality; the normalization check is done, with any exception explained; every endpoint says who can call it; the team has approved it.
+- [x] **Simple** — entities are plain nouns from the Spec; paths are nouns, not verbs (`/photos`, not `/getPhotos`).
+- [x] **Valuable** — every field and endpoint has a requirement ID; anything without one has been cut; sensitive fields are named and protected.
+- [x] **Complete** — the database matches ADR-00; every P1 requirement that stores or reads data has its entity and endpoint; every FK has a delete rule; the ERD renders and shows cardinality; the normalization check is done, with any exception explained; every endpoint says who can call it; the team has approved it.
