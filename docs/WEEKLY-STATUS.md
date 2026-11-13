@@ -4,6 +4,19 @@
 
 ---
 
+## Week 4 — November 12, 2026
+
+- **Done:**
+  - **November 10, 2026:** Completed Sections 3–4 of the Plan (`plan.md`). Section 3 defines the screens and application components, their routes, the requirements they support, and the planned build order. Section 4 identifies project risks and assumptions, rates their likelihood and impact, and provides mitigation strategies.
+  - **November 12, 2026:** Completed Section 3-4 of the Data & API Design (`data-api-design.md`) with section 3 covering the normalization check. The design was checked against 1NF, 2NF, and 3NF, with no intentional exceptions recorded. Section 4 consisted of documenting the API endpoints, including user actions for retrieving titles, adding titles, updating statuses, and deleting titles. The endpoints include request information, success responses, error responses, and access permissions.
+  - **November 12, 2026:** Added the ERD and completed the Data & API Design SVC Self-Check.
+- **Next:** Begin working on the Tasks (`tasks.md`).
+- **Blockers:** None reported.
+- **Open questions:** None recorded as specific questions in the current Specification.
+- **AI use:** AI assistance was not used to prepare any of the documents for this week.
+- **Change request:** None.
+- **Instructor response:** Awaiting approval.
+
 ## Week 3 — November 5, 2026
 
 - **Done:**
