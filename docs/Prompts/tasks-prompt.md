@@ -1,8 +1,8 @@
 # Tasks Prompt
 
-**Now we will complete the `tasks.md` file based on the `plan.md`, `specification.md`, `data-api-design.md`, `style-guide.md`, and `business-case.md` files. Creating a complete, organized, and actionable task list for the **BingeBound** application. The goal is to break the approved project plan into small, independently implementable tasks that will guide the development of the front-end prototype.**
+Now we will complete the `tasks.md` file based on the `plan.md`, `specification.md`, `data-api-design.md`, `style-guide.md`, and `business-case.md` files. Creating a complete, organized, and actionable task list for the **BingeBound** application. The goal is to break the approved project plan into small, independently implementable tasks that will guide the development of the front-end prototype.
 
-**Change the existing `tasks.md` by completing only Sections 1 (Task List) and 2 (Cross-Check). Leave Sections 3 (Gap Log) and 4 (Build Notes) untouched.**
+Change the existing `tasks.md` by completing only Sections 1 (Task List) and 2 (Cross-Check). Leave Sections 3 (Gap Log) and 4 (Build Notes) untouched.
 
 ## Task List
 
