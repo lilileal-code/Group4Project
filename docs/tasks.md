@@ -1,4 +1,4 @@
-# [Product/Service Name] — Tasks
+# BingeBound — Tasks
 
 > **When:** Week 5, then updated through Weeks 6–8 · **Owner:** Delivery Lead · **Done when:** every item in the SVC Self-Check at the end is true.
 >
