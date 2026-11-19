@@ -4,6 +4,22 @@
 
 ---
 
+## Week 5 - November 19, 2026
+
+- **Done:**
+  - **November 17, 2026** Created (`tasks-prompt.md`) as a guide for the AI to complete (`tasks.md`).
+  - **November 17, 2026:** Used the prompt to complete Sections 1 and 2 of `tasks.md`. Created an organized development task list with priorities, requirement IDs, dependencies, and completion criteria, then completed the cross-check connecting requirements to entities, API endpoints, Plan decisions, and implementation tasks.
+- **Next:**
+  - Prepare for the Week 6 validation build by reviewing the full project document suite and confirming that the P1 scenarios are ready for implementation.
+  - Run the AI build of the P1 scenarios with the entire team present, following Part A of the Build & Test guide (`docs/reference/build-and-test-guide.md`).
+  - Complete Section 3 — Gap Log — of `tasks.md` by recording every instance where the AI agent guessed, stalled, or misunderstood a project document.
+  - Assign each identified gap to the document responsible for it (Specification, Style Guide, Data & API Design, Plan, or Tasks) and identify the section that caused the issue.
+- **Blockers:** None reported.
+- **Open questions:** None recorded as specific questions in the current Specification.
+- **AI use:** AI assistance was used to create (`tasks.md`) and followed the prompt, (`tasks-prompt.md`).
+- **Change request:** None.
+- **Instructor response:** Awaiting approval.
+
 ## Week 4 — November 12, 2026
 
 - **Done:**
