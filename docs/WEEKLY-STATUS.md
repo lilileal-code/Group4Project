@@ -31,7 +31,7 @@
 - **Open questions:** None recorded as specific questions in the current Specification.
 - **AI use:** AI assistance was not used to prepare any of the documents for this week.
 - **Change request:** None.
-- **Instructor response:** Awaiting approval.
+- **Instructor response:** *jLyst: Approved*
 
 ## Week 3 — November 5, 2026
 
