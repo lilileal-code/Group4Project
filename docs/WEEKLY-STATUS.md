@@ -18,7 +18,7 @@
 - **Open questions:** None recorded as specific questions in the current Specification.
 - **AI use:** AI assistance was used to create (`tasks.md`) and followed the prompt, (`tasks-prompt.md`).
 - **Change request:** None.
-- **Instructor response:** Awaiting approval.
+- **Instructor response:** *jLyst: Approved*
 
 ## Week 4 — November 12, 2026
 
