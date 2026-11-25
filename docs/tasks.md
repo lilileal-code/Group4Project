@@ -71,7 +71,11 @@ Tasks break the Plan into small steps you can build and check one at a time.
 
 | What the agent got wrong or guessed | Which document & section caused it | Fix applied | Fixed in re-run? |
 |-------------------------------------|------------------------------------|-------------|------------------|
-| | | | |
+| Tried to scaffold Vue with a build (`npm create vue` / Vite) instead of the no-build course template. | plan.md ADR-00 says “Vue without a build step” but does not say “copy collection-template, do not run a scaffold.” | Told it to copy `.claude/skills/collection-template` into `validation/` and not run a Vue scaffold. | |
+| Asked to run Playwright to read the page title and body. | tasks.md T0 “Done when” does not say the check is manual. build-and-test guide says Part A testing is not required. | Denied Playwright. Checked `http://127.0.0.1:8765/` by hand. | |
+| Asked to push `validation/` and turn on GitHub Pages to finish T14. | tasks.md T14 says publish the public demo. build-and-test guide says `validation/` is never committed. Public demo is Week 8, repo root. | Did not publish. Left T14 uncommitted. | |
+| Data & API Design v1.0 defined User, login, `owner_id`, origin `American`, and three statuses. Spec and tasks say device-only, `U.S.`, and five statuses. | data-api-design.md Sections 0–1 and 4 vs specification.md R2, R3, R9. | Rewrote data-api-design.md to v1.1: no User, no login, correct enums, `created_at`. | |
+| Plan v1.0 allowed a simulated user picker and named PostgreSQL/Supabase as the course database. | plan.md ADR-00 and ADR-01 vs specification.md R9. | Rewrote plan.md to v1.1: no picker, no login, browser storage only. | |
 
 ---
 
