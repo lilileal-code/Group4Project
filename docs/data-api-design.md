@@ -1,127 +1,104 @@
 # [BingeBound] — Data & API Design
 
-> **When:** Week 3 (Sections 0–2), Week 4 (Sections 3–4) · **Owner:** Architecture Lead (in a team of 4, the Data & API owner) · **Done when:** every item in the SVC Self-Check at the end is true.
+> **When:** Week 3 (Sections 0–2), Week 4 (Sections 3–4) · **Owner:** Architecture Lead · **Done when:** every item in the SVC Self-Check at the end is true.
 >
-> **Version:** 1.0
+> **Version:** 1.1
 >
-> **Approved on:** ___ **by:** Architecture Lead Austin Hammond · Product Owner Lila Leal · Delivery Lead Ben Anderson
+> **Approved on:** ___ **by:** Architecture Lead Austin Hammond · Product Owner Lilah Leal · Delivery Lead Ben Anderson
 >
 > **Filled-in Example:** `docs/examples/data-api-design-example.md`
 
 This document turns the Spec's nouns into data and its user actions into endpoints. If the built app and this document disagree, this document wins until it's deliberately changed. Unresolved questions go in the Spec's Open Questions.
 
+Version 1.1 removes the User entity and login. Spec constitution item 1 and R9 forbid a login wall in v1. The course build stores titles on the device.
+
 ---
 
 ## 0. Database & Storage
 
-**Database:** PostgreSQL through Supabase for System Implementation, as proposed in ADR-00 of plan.md
+**Database:** None in the course test build. Titles live in the browser (local storage), one list per device. A later System Implementation may use PostgreSQL, but v1 does not.
 
-**Build option:** Simulated backend for course test build. Use the course’s simulated login/user picker, sample JSON and browser storage here. This uses the exact same definitions for entities User and Title and their corresponding field names in System Implementation. Simulated backend here uses Supabase Auth to gain access to authenticated user ID, and then titles are stored in PostgreSQL.
+**Build option:** Simulated data layer. One JSON file of sample titles in `data/`, and functions in `data.js` that read and write the device list. No Supabase Auth, no user picker, no passwords.
 
-**We store:** A user's watchlist titles and each title's type, origin, and watch status. Each title is associated with one user so queries can return only that user's list. The demo list is marked so the interface can label it as demonstration data.
+**We store:** The titles on this device: title text, type, origin, status, optional note, rating, episode progress for a series, and the time it was added (so the list can sort newest first).
 
-**We do NOT store:** Password, streaming catalog data, episode progress, external service data. All authentication data is owned by the authentication service, and this app stores nothing but the user ID reference.
+**We do NOT store:** Users, passwords, accounts, streaming catalog data, or anything fetched from Netflix, TMDB, or another API.
 
-**Sensitive fields:** Title.title and Title.status will reveal the viewing interests of a user. An optional note would also be personal in nature if you were to retain it. In the real backend, we can enforce per-user access using Supabase Row Level Security (RLS) and setup policies to enforce that Title.owner_id = authenticated_user.id. In the test build, we will store the Title in the browser scoped to the currently selected simulated user. We will not store any personal data in the public sample JSON files. The Demo sample records are all synthetic and clearly labeled as such.
-
-*This template assumes a relational database (tables, rows, keys). Using a document database such as MongoDB or Firestore? See the "Document databases" box in `docs/reference/data-api-design-guide.md`.*
+**Sensitive fields:** Title text, status, notes, and rating are personal. They stay on the device. Sample JSON is synthetic and labeled. Clearing site data clears the list. That matches Spec R9 and R10-style device storage.
 
 ---
 
 ## 1. Entities
 
-*One table per entity — a thing the app keeps track of, usually a noun from the Spec's scenarios. Every field needs a requirement ID; if no requirement needs it, cut it.*
+**Key:** `PK` = identifies each row · `FK → Entity` = points to another entity's PK · `Unique` = no two rows can share this value.
 
-**Key:** `PK` = identifies each row · `FK → Entity` = points to another entity's PK · `Unique` = no two rows can share this value. For every FK, say what happens when the parent is deleted: **block** it, or **delete** the children too — this is where data gets silently lost if nobody decides.
-
-**Entity: [Name]**
-
-| Field | Type | Key | Required? | Req ID |
-|-------|------|-----|-----------|--------|
-| id | uuid | PK | Yes | |
-| | | | | |
-
-**Entity: User**
-
-One person who owns a watchlist. In the real backend, `id` is the Supabase Auth user UUID. In the course test build, it is the selected simulated user's stable ID.
-
-| Field | Type | Key | Required? | Req ID |
-|-------|------|-----|-----------|--------|
-| id | uuid | PK | Yes | R1 |
-| is_demo | boolean | — | Yes (default false) | R8 |
+There is one entity. There is no User.
 
 **Entity: Title**
 
-One movie or show in a user's watchlist. Users may enter the same title more than once.
+One movie or series on this device's list. The same title text may appear more than once.
 
 | Field | Type | Key | Required? | Req ID |
 |-------|------|-----|-----------|--------|
-| id | uuid | PK | Yes | R1 |
-| owner_id | uuid | FK → User.id | Yes | R1 |
+| id | text | PK | Yes | R1 |
 | title | text | — | Yes; non-blank | R2, R6 |
-| type | enum: `movie`, `show` | — | Yes | R2 |
-| origin | enum: `American`, `International` | — | Yes | R2, R4 |
-| status | enum: `To watch`, `Watching`, `Finished` | — | Yes; default `To watch` | R3, R4 |
+| type | enum: `Movie`, `Series` | — | Yes | R2, R14 |
+| origin | enum: `U.S.`, `International` | — | Yes | R2, R4, R15 |
+| status | enum: `Plan to Watch`, `Watching`, `Completed`, `Dropped`, `On Hold` | — | Yes; default `Plan to Watch` | R3, R4 |
+| note | text | — | No | R13 |
+| rating | integer 0–10 | — | No | R13 |
+| episode_current | integer | — | No; only when type is Series | R14 |
+| episode_total | integer | — | No; only when type is Series | R14 |
+| created_at | text (ISO date-time) | — | Yes | R1 |
 
-**Foreign-key delete rule:** `Title.owner_id → User.id` uses **delete children too** (`ON DELETE CASCADE`). Deleting a user deletes that user's titles. Deleting one title removes only that title, as required by R11.
+**Foreign-key delete rule:** None. There is no parent entity. Deleting a title removes only that title (R11).
 
 ---
 
 ## 2. Entity Relationship Diagram (ERD)
 
-*Draw every entity in [Mermaid](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) with its keys and relationships. List only PK, FK, and Unique fields — Section 1 holds the rest. Check that it renders at [mermaid.live](https://mermaid.live) before pasting it here.*
-
 ```mermaid
 erDiagram
-  USER ||--o{ TITLE : "owns"
-  USER {
-    uuid id PK
-  }
   TITLE {
-    uuid id PK
-    uuid owner_id FK
+    text id PK
   }
 ```
 
-*`||--o{` means "one to zero-or-many". See the Mermaid link for other options.*
+One entity. No relationship.
 
 ---
 
 ## 3. Normalization Check
 
-- [x] **1NF** — every field holds one value (no lists or comma-separated values in a field).
+- [x] **1NF** — every field holds one value.
 - [x] **2NF** — every field depends on the whole primary key.
-- [x] **3NF** — no field depends on another non-key field (e.g. don't store `event_name` on a photo — store `event_id`).
+- [x] **3NF** — no field depends on another non-key field.
 
-**Intentional exceptions:** None.
+**Intentional exceptions:** None. `episode_current` and `episode_total` are empty when type is Movie. They are not a second table because a title has at most one progress pair.
 
 ---
 
 ## 4. API Endpoints
 
-*One row per user action. The path names a thing (`/v1/photos`); the method says what to do with it (`GET` read, `POST` create, `PATCH` update, `DELETE` remove). If the app has login, list the login endpoints too (e.g. `POST /v1/login`, `GET /v1/me`, `POST /v1/logout`). If a response returns a field that isn't stored (such as a photo `url` built from a file path), say where it comes from.*
+These are the shapes `data.js` must return. There is no login. “Anyone” means the person using this browser.
 
 | Req ID | Method | Path | Request | Success response | Errors | Who can call it |
 |--------|--------|------|---------|------------------|--------|-----------------|
-| | | | | | | Anyone / Member / Admin |
-| R1 | POST | /v1/login | { user_id } (SELECTED FROM user picker - SIMULATED DATA) | 200 - { id: 1, is_demo: true } | 400 - { "error": "user_id is invalid" } | Anyone |
-| R1 | GET | /v1/me | — | 200 `{ id, is_demo }` for the current user | 401 | Member |
-| R1 | POST | /v1/logout | — | 204 | — | Member |
-| R1 | GET | /v1/users | — | 200 [{id, is_demo}] | — | Anyone |
-| R1, R8 | GET | /v1/demo/titles | — | 200 `{is_demo: true, items: [...]}` | — | Anyone |
-| R1, R8 | GET | /v1/demo/titles/{id} | Title ID in path | 200 requested synthetic sample title | 404 title not found | Anyone |
-| R1, R4, R5, R7 | GET | /v1/titles | Search text, Title type, Title origin, Status | 200 List of Titles belonging to the user that sent the request. Titles that don’t match the search, type, origin or status filters return a 200 with an empty array. | 400 - Bad request: The filter values are incorrect. 401 - Unauthorized. | Member – logged in user. |
-| R1 | GET | /v1/titles/{id} | Title ID in path | 200 requested synthetic sample title | 401, 404 title not found or not owned by the current user | Member |
-| R2, R6 | POST | /v1/titles | { title, type, origin } | { id: 201, title: '...', type: '...', origin: '...', status: 'To watch', user_id: your_id } | 400: { error: "title can't be blank or of wrong length" }, 401, 404 (the title wasn’t found or you are not the owner of the title) | Member – logged in user |
-| R3 | PATCH | /v1/titles/{id} | status = {status} | 200 { title: '...', type: '...', origin: '...', status: '...' } | 400: {error: "status: invalid status"}; 401; 404: {error: "Title not found"\|"Title is owned by different user"} | Member – logged in user |
-| R11 | DELETE | /v1/titles/{id} | title ID in path | 204 – Title was deleted | 401; 404 – Title not found or user does not own title | Member – logged in user |
+| R1, R4, R5, R7 | GET | /v1/titles | Optional search text, type, origin, status | 200 `{ items: [Title, ...] }` newest first. No match → 200 `{ items: [] }`. The screen, not this endpoint, shows “No titles match. Clear filters.” | 400 if a filter value is not in the enum | Anyone |
+| R1 | GET | /v1/titles/{id} | Title id in path | 200 the Title | 404 `{ "error": "Title not found" }` | Anyone |
+| R8 | GET | /v1/demo/titles | — | 200 `{ is_demo: true, label: "Sample titles. Not your personal list.", items: [Title, ...] }` | — | Anyone |
+| R2, R6 | POST | /v1/titles | `{ title, type, origin, status, note?, rating?, episode_current?, episode_total? }` | 201 the saved Title, including `id` and `created_at`. Status defaults to `Plan to Watch` if omitted. | 400 `{ "error": "Type a title to save it." }` if title is blank. 400 if type, origin, or status is not in the enum. | Anyone |
+| R3, R13, R14 | PATCH | /v1/titles/{id} | Any of status, note, rating, episode_current, episode_total | 200 the updated Title | 400 if a value is out of range. 404 if not found. | Anyone |
+| R11 | DELETE | /v1/titles/{id} | Title id in path | 204 | 404 if not found | Anyone |
 
-*Common status codes: `200` OK · `201` Created · `400` bad input · `401` not logged in · `403` not allowed · `404` not found · `409` conflict (e.g. duplicate).*
+No `POST /v1/login`, `GET /v1/me`, or `POST /v1/logout`. Those would violate Spec R9.
+
+**Simulated:** R9 is simulated as “no auth check.” Storage is the browser, not PostgreSQL. Mark both in the Week 8 Build Notes.
 
 ---
 
 ## SVC Self-Check
 
-- [x] **Simple** — entities are plain nouns from the Spec; paths are nouns, not verbs (`/photos`, not `/getPhotos`).
-- [x] **Valuable** — every field and endpoint has a requirement ID; anything without one has been cut; sensitive fields are named and protected.
-- [x] **Complete** — the database matches ADR-00; every P1 requirement that stores or reads data has its entity and endpoint; every FK has a delete rule; the ERD renders and shows cardinality; the normalization check is done, with any exception explained; every endpoint says who can call it; the team has approved it.
+- [x] **Simple** — one noun, Title. Paths are nouns.
+- [x] **Valuable** — every field has a requirement ID. Login fields were cut because no requirement needs them.
+- [x] **Complete** — storage matches the device-only decision. Every P1 data requirement has a field and an endpoint. No FK to invent. ERD is one entity. Normalization is done. No endpoint requires a login.
