@@ -18,6 +18,10 @@ body {
   min-height: 100%;
 }
 
+#app {
+  min-height: 100vh;
+}
+
 body {
   background: var(--background);
   color: var(--text);
@@ -25,15 +29,36 @@ body {
   font-size: 16px;
 }
 
-.app-header,
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
 .app-shell {
   max-width: 420px;
   margin: 0 auto;
   padding: 16px;
 }
 
-.app-header h1 {
-  margin: 0;
+.wordmark {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+main {
+  width: 100%;
+}
+
+.page-heading {
+  margin: 0 0 16px;
   color: var(--primary);
   font-size: 24px;
   font-weight: 700;
@@ -55,6 +80,10 @@ body {
   background: var(--surface);
 }
 
+.title-card:hover {
+  background: var(--background);
+}
+
 .title-card h2 {
   margin: 0 0 16px;
   color: var(--primary);
@@ -63,5 +92,99 @@ body {
 }
 
 .title-card p {
-  margin-bottom: 8px;
+  margin: 0 0 8px;
+}
+
+.title-card .card-status {
+  margin-bottom: 0;
+}
+
+.add-title-form {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.form-field label {
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.button:focus-visible,
+.wordmark:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button-primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.button-primary:hover:not(:disabled) {
+  background: #153315;
+}
+
+.button-secondary {
+  background: #ffffff;
+  color: var(--primary);
+}
+
+.button-secondary:hover {
+  background: var(--accent);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin: 0;
+  color: var(--error);
+}
+
+.form-field input[aria-invalid="true"] {
+  border-color: var(--error);
 }
