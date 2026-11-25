@@ -91,6 +91,21 @@ main {
   font-weight: 700;
 }
 
+.title-link {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.title-link:hover {
+  text-decoration: underline;
+}
+
+.title-link:focus-visible,
+.back-link:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
 .title-card p {
   margin: 0 0 8px;
 }
@@ -130,6 +145,7 @@ main {
 
 .form-field input:focus,
 .form-field select:focus,
+.status-edit-form select:focus,
 .button:focus-visible,
 .wordmark:focus-visible {
   outline: 2px solid var(--primary);
@@ -187,4 +203,73 @@ main {
 
 .form-field input[aria-invalid="true"] {
   border-color: var(--error);
+}
+
+.back-link {
+  margin-bottom: 16px;
+}
+
+.title-detail .page-heading {
+  margin-bottom: 16px;
+}
+
+.status-edit-form {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.status-edit-form select {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+}
+
+.status-message {
+  margin: 0;
+}
+
+.title-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.filter-button-selected {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.filter-button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.search-field {
+  margin-bottom: 16px;
+}
+
+.no-results-message {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
